@@ -48,10 +48,10 @@ str(wine)
 summary(wine)
 ```
 
-###Initial thoughts on data
+### Initial thoughts on data
 There are 12 variables of interest. Main variable of interest is 'quality,' which is an integer. I notice a lack of categorical variables, although quality could be treated as one. Noticing some outliers in some variables: max residual sugar, max chlorides, max free.sulfur.dioxide, and min & max of total sulfur dioxide. The mean/median quality score is a 6, with a mix of 3 and max of 9.
 
-###Acidity
+### Acidity
 First, I want to look at acidity. There are a few variables related to acidity: fixed acidity, volatile acidity, citric acid, and pH. Acidity has an effect on taste, so it may be correlated to the score. Let's see how the different types of acidity are distributed amongst white wines.
 
 ```{r echo=FALSE, FixedAcidity}
@@ -125,7 +125,7 @@ pH is between 2.72 and 3.82, with a mean and median around 3.18, and a fairly no
 
 I have now looked at all the acid variables - only the volatile acidity had a pronounced long tail. None of the extreme outliers seem significant for now, in terms of its effect on quality score, although fixed acidity may be worth looking into later.
 
-###Sweet & Salty
+### Sweet & Salty
 Now lets look into sweetness and saltiness.
 ```{r echo=FALSE, ResidualSugar}
 qplot(residual.sugar, data=wine, binwidth=.1)
@@ -161,7 +161,7 @@ summary(subset(wine, chlorides>.05)$quality)
 
 Chlorides, which measures the saltiness of the wine, is centered around .043, with a very long right skewed tail. The tail quality score is representative of the entire data set, so not sure if high chloride content has any bearing on quality.
 
-###Sulfur
+### Sulfur
 Let's look at free sulfur, total sulfur, and sulphates.
 
 ```{r echo=FALSE, FreeSO2}
@@ -200,7 +200,7 @@ summary(wine$sulphates)
 
 Sulphates, which is an additive, has a similar distribution of the previous sulfur variables I looked at. Most are around 0.48, with a long tail. Outliers do not seem to have an effect on quality.
 
-###Density and Alcohol %
+### Density and Alcohol %
 ```{r echo=FALSE, Density}
 qplot(density, data=wine, binwidth=.0007)+
   xlim(.985, 1.005)
@@ -217,7 +217,7 @@ summary(wine$alcohol)
 
 Alcohol % is right skewed, but the tail isn't that long. There is a mode at around 9.5, and the median and mean are around 10.5. I would be interested to see what alcohol level has to do with quality score.
 
-###Quality Score
+### Quality Score
 ```{r echo=FALSE, QualityScore}
 qplot(quality, data=wine)
 table(wine$quality)
@@ -262,7 +262,7 @@ I also changed quality score to an ordered factor, so that it would be treated a
 
 # Bivariate Plots Section
 
-###Initial Assessment
+### Initial Assessment
 ```{r echo=FALSE, Bivariate_Plots}
 
 #create correlation matrix for all numerical variables
@@ -280,7 +280,7 @@ Boxplots for quality scores: I see a decreasing quality score with total sulfur 
 
 Correlation values: There is a strong correlation between residual sugar and density - seems to be a linear relationship. Alcohol seems to have a lot of strong predictor variables. Since the boxplot showed high alcohol content to be related to higher quality scores, these variables will be important to explore.
 
-###Acidity to Quality
+### Acidity to Quality
 
 ```{r echo=FALSE, Acidity_vs_Quality}
 
@@ -315,7 +315,7 @@ Looking at these 6 panels related to acidity - The only thing that stands out is
 
 I tried creating another variable - total acidity. This added up all the variables related to the acidity, and then compared it to the pH.  This new variable just looks like a copy of the fixed acidity variable - without a weight to assign to each acidic variable, the fixed acidity overwhelms the new variable and renders it useless.
 
-###Acidity and pH
+### Acidity and pH
 ```{r echo=FALSE, Acidity_vs_pH}
 ph1<-ggplot(aes(x=pH, y=fixed.acidity), data=wine)+
   geom_point(alpha=.25)+
@@ -339,7 +339,7 @@ I thought there may be more of a relationship between pH and the acidic variable
 
 In the 4th panel, I put citric acid with fixed acidity. I think the positive relationship I see here is because adding citric acid will increase the fixed acidity levels, since citric acid is acidic. Nothing interesting here.
 
-###Residual Sugar Analysis
+### Residual Sugar Analysis
 ```{r echo=FALSE, ResidualSugar_Quality}
 ggplot(aes(x=quality, y=residual.sugar), data=wine)+
   geom_boxplot()+
@@ -389,7 +389,7 @@ ggplot(aes(x=residual.sugar, y=density),
 
 Residual sugar and density had the highest correlation value of any variable pair. There are 2 clusters of data points, one around the residual sugar value of 1, and then a long tail >4. There may be a linear relationship for the tail - as residual sugar increases, density rises. A closeup of the cluster around 1 reveals there's not much of a pattern in the set of residual sugar under 4.
 
-###Density Bivariate Analysis
+### Density Bivariate Analysis
 ```{r echo=FALSE, DensityBivariate}
 qplot(x=quality, y=density, data=wine, geom='boxplot')+
   ylim(0.985, quantile(wine$density,.99))
@@ -397,7 +397,7 @@ qplot(x=quality, y=density, data=wine, geom='boxplot')+
 
 Higher quality wines are less dense. I think there might be more insight if I delve deeper into density. Density and alcohol had a high correlation.
 
-###Density and Alcohol
+### Density and Alcohol
 ```{r echo=FALSE, AlcoholvsOthers}
 qplot(quality, alcohol, data=wine, geom='boxplot')
 
@@ -417,7 +417,7 @@ The density of sugar may explain some of these relationships as well. If there i
 
 Maybe the quality has something to do with the ratio of sugar to alcohol.
 
-###Alcohol Bivariate Analysis
+### Alcohol Bivariate Analysis
 I just explored alcohol and density
 ```{r echo=FALSE, AlcoholvsSugar}
 ggplot(aes(y=residual.sugar, x=alcohol),  data=wine)+
